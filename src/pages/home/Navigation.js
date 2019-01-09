@@ -8,13 +8,14 @@ export default ({ children }) => {
 const Styles = StyleSheet.create({
   container: {
     ...Platform.select({
-      ios: { marginTop: 24 },
-      android: { marginTop: 84 }
+      ios: { paddingTop: 26 },
+      android: { paddingTop: 8 }
     }),
     // height: 44,
     // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 20
+    paddingHorizontal: 12
+    // backgroundColor: '#1A94F6'
   }
 })

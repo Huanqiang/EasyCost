@@ -1,42 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, View, Image, Text, TouchableHighlight } from 'react-native'
+import { StyleSheet, View, Image, Text, TouchableHighlight, Dimensions } from 'react-native'
 import Ripple from 'react-native-material-ripple'
 
 import backIcon from '../../static/icon/back.png'
 import doneIcon from '../../static/icon/done.png'
 import cleanIcon from '../../static/icon/clean.png'
 
+const { width, height } = Dimensions.get('window')
+const KEY_WIDTH = width / 4
+
 const keyboardValues = [[7, 8, 9, 'clean'], [4, 5, 6, 'back'], [1, 2, 3, null], ['blank', 0, 'dot', 'done']]
 
 export default class NumberKeyboard extends React.Component {
-  // keyboardValues = [
-  //   [
-  //     { value: 7, func: this.add },
-  //     { value: 8, func: this.add },
-  //     { value: 9, func: this.add },
-  //     { value: 'clean', func: this.clean }
-  //   ],
-  //   [
-  //     { value: 4, func: this.add },
-  //     { value: 5, func: this.add },
-  //     { value: 6, func: this.add },
-  //     { value: 'back', func: this.back }
-  //   ],
-  //   [
-  //     { value: 1, func: this.add },
-  //     { value: 2, func: this.add },
-  //     { value: 3, func: this.add },
-  //     { value: null, func: null }
-  //   ],
-  //   [
-  //     { value: 'blank', func: null },
-  //     { value: 0, func: this.add },
-  //     { value: 'dot', func: this.setDecimal },
-  //     { value: 'done', func: this.done }
-  //   ]
-  // ]
-
   constructor(props) {
     super(props)
     this.state = {
@@ -104,7 +80,7 @@ export default class NumberKeyboard extends React.Component {
   renderKey = (keyJsx, onPress, columnIndex, style = {}, disabled = false) => {
     return (
       <Ripple
-        rippleColor={'#000'}
+        rippleColor={'#888888'}
         key={columnIndex}
         disabled={disabled}
         onPressIn={onPress}
@@ -121,23 +97,23 @@ export default class NumberKeyboard extends React.Component {
     }
 
     if (key === 'clean') {
-      return this.renderKey(<Image source={cleanIcon} style={{ width: 24, height: 24 }} />, this.clean, columnIndex)
+      return this.renderKey(<Image source={cleanIcon} style={{ width: 30, height: 30 }} />, this.clean, columnIndex)
     } else if (key === 'back') {
-      return this.renderKey(<Image source={backIcon} style={{ width: 24, height: 24 }} />, this.back, columnIndex)
+      return this.renderKey(<Image source={backIcon} style={{ width: 26, height: 26 }} />, this.back, columnIndex)
     } else if (key === 'done') {
       return this.renderKey(
-        <Image source={doneIcon} style={{ width: 24, height: 24 }} />,
+        <Image source={doneIcon} style={{ width: 30, height: 30 }} />,
         this.done,
         columnIndex,
         Styles.doneKey
       )
     } else if (key === 'dot') {
-      return this.renderKey(<Text>.</Text>, this.setDecimal, columnIndex)
+      return this.renderKey(<Text style={Styles.keyTitle}>.</Text>, this.setDecimal, columnIndex)
       return
     } else if (key === 'blank') {
       return this.renderKey(<View />, null, columnIndex, {}, true)
     } else {
-      return this.renderKey(<Text>{key}</Text>, () => this.add(key), columnIndex)
+      return this.renderKey(<Text style={Styles.keyTitle}>{key}</Text>, () => this.add(key), columnIndex)
     }
   }
 
@@ -176,15 +152,22 @@ NumberKeyboard.defaultProps = {
 }
 
 const Styles = StyleSheet.create({
-  container: {},
+  container: { flex: 1 },
   keyboardRowStyle: {
     flexDirection: 'row'
   },
   keyContainerStyle: {
     height: 60,
-    width: 64,
+    width: KEY_WIDTH,
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
+    borderColor: '#E8E8E8',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  keyTitle: {
+    color: '#575556',
+    fontSize: 20
   },
   doneKey: {
     height: 60 * 2,
