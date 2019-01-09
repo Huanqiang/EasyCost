@@ -18,7 +18,7 @@ const transformDay = day => {
 
 // 获取图片的主要颜色
 const getMainColorInImage = (imageUrl, success, failure) => {
-  NativeModules.RNPixelColor.getHex('./bundle/assets/src/static/icon/digit.png', { x: 40, y: 8 }, (err, res) => {
+  NativeModules.RNPixelColor.getHex(imageUrl, { x: 40, y: 8 }, (err, res) => {
     if (err) {
       failure(err)
     } else {
