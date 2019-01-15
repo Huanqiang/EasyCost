@@ -1,12 +1,15 @@
 import React from 'react'
-import { View, Text, NativeModules } from 'react-native'
+import { View, Text, NativeModules, Keyboard } from 'react-native'
 import NumberKeyboard from './NumberKeyboard'
 import NavigationBar from './NavigationBar'
 import Consume from './Consume'
 import BillCategories from './BillCategories'
+import Comment from './Comment'
 import { getMainColorInImage } from '../../util/util'
+import { saveBill, getCategoryComments } from '../../realm'
+import { CategotyIconAddress } from '../../util/constant'
+import Calendars from './Calendars'
 
-import self from '../../static/icon/type/self.png'
 import categories from './categories'
 
 export default class ChangeAccount extends React.Component {
@@ -18,24 +21,61 @@ export default class ChangeAccount extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      icon: self,
+      icon: 'self.png',
       category: '一般',
       money: '0.00',
-      color: '#FF9191'
+      color: '#FF9191',
+      comment: '',
+      date: '2019-01-15',
+      predictCommets: []
     }
+    this.calendarRef = React.createRef()
+  }
+
+  componentDidMount() {
+    this.getCurCategoryComments(this.state.category)
+  }
+
+  saveNewBill = () => {
+    const { icon, category, money, color, comment, date, predictCommets } = this.state
+    saveBill({ icon, category, money, color, comment, date: new Date(date) })
+  }
+
+  showCalendar = () => {
+    console.log('showCalendar')
+    this.calendarRef.current.show()
+  }
+
+  changeDate = date => {
+    console.log(date)
+    this.setState({ date })
+  }
+
+  changeCategories = category => {
+    this.setState({ icon: category.selectedIcon, category: category.name })
+    this.getColor(category.selectedIcon)
+    this.getCurCategoryComments(category.name)
+  }
+
+  changeComment = comment => {
+    this.setState({ comment })
   }
 
   changeMoney = money => {
     this.setState({ money })
   }
 
-  changeDate = date => {
-    console.log('改变日期')
+  selectPredictComment = comment => {
+    this.setState({ comment })
   }
 
-  changeCategories = category => {
-    this.setState({ icon: category.selectedIcon, category: category.name })
-    this.getColor(category.iconName)
+  getCurCategoryComments = category => {
+    getCategoryComments(category, comments => {
+      this.setState({ predictCommets: comments })
+      comments.forEach(comment => {
+        console.log(comment)
+      })
+    })
   }
 
   back = () => {
@@ -43,25 +83,35 @@ export default class ChangeAccount extends React.Component {
   }
 
   render() {
-    const { icon, category, money, color } = this.state
+    const { icon, category, money, color, comment, date, predictCommets } = this.state
     return (
       <View style={{ flex: 1 }}>
-        <NavigationBar onClick={this.changeDate} onBack={this.back} date={'1月1日'} />
-        <Consume icon={icon} category={category} money={money} color={color} />
+        <NavigationBar onClick={this.showCalendar} onBack={this.back} date={date} />
+        <Consume icon={icon} category={category} money={money} color={color} onClick={this.hiddenKeyBoard} />
         <BillCategories categories={categories} onChange={this.changeCategories} />
-        <Text>Charge Account: ￥{this.state.money}</Text>
-        <NumberKeyboard
-          onChangeNumber={this.changeMoney}
-          onDone={this.changeMoney}
-          style={{ position: 'absolute', bottom: -60 }}
+        <Comment
+          comment={comment}
+          onChangeComment={this.changeComment}
+          predictCommets={predictCommets}
+          onClick={this.selectPredictComment}
         />
+        {/* <NumberKeyboard
+          onChangeNumber={this.changeMoney}
+          onDone={this.saveNewBill}
+          style={{ position: 'absolute', bottom: -60 }}
+        /> */}
+        <Calendars ref={this.calendarRef} day={date} onClick={this.changeDate} />
       </View>
     )
   }
 
-  getColor = imageUrl => {
+  hiddenKeyBoard = () => {
+    Keyboard.dismiss()
+  }
+
+  getColor = image => {
     getMainColorInImage(
-      `bundle/assets/src/static/icon/type/${imageUrl}.png`,
+      CategotyIconAddress + image,
       res => {
         this.setState({ color: res })
       },

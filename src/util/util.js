@@ -12,7 +12,7 @@ const transformDay = day => {
   } else if (moment(day).isSame(yesterday, 'day')) {
     return '昨天'
   } else {
-    return day
+    return moment(day).format('M月D日')
   }
 }
 

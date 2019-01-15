@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Image, Text, TouchableOpacity, Dimensions } from 'react-native'
+import { CategotyIconAddress } from '../../util/constant'
 
 const { width, height } = Dimensions.get('window')
 const CATEGORY_WIDTH = width / 5
@@ -9,9 +10,15 @@ const Category = ({ onClick, category, active }) => {
     <TouchableOpacity onPress={() => onClick(category)}>
       <View style={Styles.categoryItem}>
         {active ? (
-          <Image source={category.selectedIcon} style={{ width: 36, height: 36, marginBottom: 4 }} />
+          <Image
+            source={{ uri: CategotyIconAddress + category.selectedIcon }}
+            style={{ width: 36, height: 36, marginBottom: 4 }}
+          />
         ) : (
-          <Image source={category.unselectedIcon} style={{ width: 36, height: 36, marginBottom: 4 }} />
+          <Image
+            source={{ uri: CategotyIconAddress + category.unselectedIcon }}
+            style={{ width: 36, height: 36, marginBottom: 4 }}
+          />
         )}
         <Text style={{}}>{category.name}</Text>
       </View>

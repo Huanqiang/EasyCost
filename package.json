@@ -13,13 +13,14 @@
     "prop-types": "^15.6.2",
     "react": "16.6.3",
     "react-native": "0.57.8",
+    "react-native-calendars": "^1.21.0",
     "react-native-circular-progress": "^1.1.0",
     "react-native-gesture-handler": "^1.0.12",
-    "react-native-material-ripple": "^0.8.0",
     "react-native-material-textfield": "^0.12.0",
     "react-native-svg": "^8.0.10",
     "react-native-swipeout": "^2.3.6",
-    "react-navigation": "^3.0.9"
+    "react-navigation": "^3.0.9",
+    "realm": "^2.22.0"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

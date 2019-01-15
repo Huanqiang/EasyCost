@@ -1,17 +1,17 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native'
+import { transformDay } from '../../util/util'
 
 import calendar from '../../static/icon/calendar.png'
 import close from '../../static/icon/close.png'
-import { styles } from 'react-native-material-ripple/styles'
 
 const Date = ({ date, onClick }) => {
   return (
     <TouchableWithoutFeedback onPress={onClick}>
-      <View style={[Styles.flexRow, styles.date]}>
+      <View style={[Styles.flexRow, Styles.date]}>
         <Image source={calendar} style={{ width: 24, height: 24, marginRight: 8 }} />
 
-        <Text style={{ fontSize: 20, color: '#FFF' }}>{date}</Text>
+        <Text style={{ fontSize: 20, color: '#FFF' }}>{transformDay(date)}</Text>
       </View>
     </TouchableWithoutFeedback>
   )

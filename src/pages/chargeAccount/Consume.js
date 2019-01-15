@@ -1,17 +1,20 @@
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
 
-export default ({ icon, category, money = '0.00', color = '#FFFFFF' }) => {
+export default ({ icon, category, money = '0.00', color = '#FFFFFF', onClick = () => {} }) => {
   return (
     <View style={[Styles.container, { backgroundColor: color }]}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <View style={Styles.iconBG}>
-          <Image source={icon} style={{ width: 36, height: 36 }} />
+          <Image source={{ uri: `bundle/assets/src/static/icon/type/${icon}` }} style={{ width: 36, height: 36 }} />
         </View>
         <Text style={Styles.category}>{category}</Text>
       </View>
 
-      <Text style={{ fontSize: 26, color: color === '#FFFFFF' ? 'black' : '#FFF' }}>￥{money}</Text>
+      {/* 尽可能的降低操作的反映 */}
+      <TouchableOpacity onPress={onClick} activeOpacity={0.9}>
+        <Text style={{ fontSize: 26, color: color === '#FFFFFF' ? 'black' : '#FFF' }}>￥{money}</Text>
+      </TouchableOpacity>
     </View>
   )
 }

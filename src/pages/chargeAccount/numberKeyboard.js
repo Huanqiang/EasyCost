@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, View, Image, Text, TouchableHighlight, Dimensions } from 'react-native'
-import Ripple from 'react-native-material-ripple'
 
 import backIcon from '../../static/icon/back.png'
 import doneIcon from '../../static/icon/done.png'
@@ -79,15 +78,14 @@ export default class NumberKeyboard extends React.Component {
 
   renderKey = (keyJsx, onPress, columnIndex, style = {}, disabled = false) => {
     return (
-      <Ripple
-        rippleColor={'#888888'}
+      <TouchableHighlight
         key={columnIndex}
-        disabled={disabled}
-        onPressIn={onPress}
+        underlayColor={'#E8E8E8'}
         style={[Styles.keyContainerStyle, style]}
+        onPress={onPress}
       >
         {keyJsx}
-      </Ripple>
+      </TouchableHighlight>
     )
   }
 
