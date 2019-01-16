@@ -12,7 +12,7 @@ const AppNavigator = createStackNavigator(
     Setting: SettingScreen
   },
   {
-    initialRouteName: 'ChargeAccount'
+    initialRouteName: 'Home'
   }
 )
 export default createAppContainer(AppNavigator)

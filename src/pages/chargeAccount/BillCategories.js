@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, Image, Text, TouchableOpacity, Dimensions } from 'react-native'
+import { StyleSheet, View, Image, Text, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from 'react-native'
 import { CategotyIconAddress } from '../../util/constant'
 
 const { width, height } = Dimensions.get('window')
@@ -7,7 +7,7 @@ const CATEGORY_WIDTH = width / 5
 
 const Category = ({ onClick, category, active }) => {
   return (
-    <TouchableOpacity onPress={() => onClick(category)}>
+    <TouchableWithoutFeedback onPress={() => onClick(category)}>
       <View style={Styles.categoryItem}>
         {active ? (
           <Image
@@ -22,7 +22,7 @@ const Category = ({ onClick, category, active }) => {
         )}
         <Text style={{}}>{category.name}</Text>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   )
 }
 

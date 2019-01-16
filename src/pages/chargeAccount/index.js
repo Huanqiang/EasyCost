@@ -39,6 +39,7 @@ export default class ChangeAccount extends React.Component {
   saveNewBill = () => {
     const { icon, category, money, color, comment, date, predictCommets } = this.state
     saveBill({ icon, category, money, color, comment, date: new Date(date) })
+    this.back()
   }
 
   showCalendar = () => {
@@ -52,9 +53,11 @@ export default class ChangeAccount extends React.Component {
   }
 
   changeCategories = category => {
-    this.setState({ icon: category.selectedIcon, category: category.name })
     this.getColor(category.selectedIcon)
-    this.getCurCategoryComments(category.name)
+    this.setState({ icon: category.selectedIcon, category: category.name })
+    setTimeout(() => {
+      this.getCurCategoryComments(category.name)
+    }, 50)
   }
 
   changeComment = comment => {
@@ -76,10 +79,11 @@ export default class ChangeAccount extends React.Component {
         console.log(comment)
       })
     })
+    // this.setState({ predictCommets: getCategoryComments(category) })
   }
 
   back = () => {
-    console.log('back')
+    this.props.navigation.goBack()
   }
 
   render() {
@@ -95,11 +99,11 @@ export default class ChangeAccount extends React.Component {
           predictCommets={predictCommets}
           onClick={this.selectPredictComment}
         />
-        {/* <NumberKeyboard
+        <NumberKeyboard
           onChangeNumber={this.changeMoney}
           onDone={this.saveNewBill}
           style={{ position: 'absolute', bottom: -60 }}
-        /> */}
+        />
         <Calendars ref={this.calendarRef} day={date} onClick={this.changeDate} />
       </View>
     )

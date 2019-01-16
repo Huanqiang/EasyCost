@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, View, Text, TouchableOpacity } from 'react-native'
+import { Animated, View, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import { Calendar, CalendarList, Agenda, LocaleConfig } from 'react-native-calendars'
 
 LocaleConfig.locales['zh'] = {
@@ -53,52 +53,93 @@ export default class Calendars extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      showAnimation: new Animated.Value(0)
+      showAnimation: new Animated.Value(0),
+      moveAnimation: new Animated.Value(0)
     }
   }
 
   show = () => {
-    Animated.spring(this.state.showAnimation, {
-      toValue: 1,
-      duration: 500
-    }).start()
+    Animated.sequence([
+      Animated.timing(this.state.showAnimation, {
+        toValue: 1,
+        duration: 1
+      }),
+      Animated.timing(this.state.moveAnimation, {
+        toValue: 1,
+        duration: 400
+      })
+    ]).start()
   }
 
   hidden = () => {
-    Animated.spring(this.state.showAnimation, {
-      toValue: 0,
-      duration: 500
-    }).start()
+    Animated.sequence([
+      Animated.timing(this.state.moveAnimation, {
+        toValue: 0,
+        duration: 400
+      }),
+      Animated.timing(this.state.showAnimation, {
+        toValue: 0,
+        duration: 1
+      })
+    ]).start()
   }
 
   render() {
-    const { showAnimation } = this.state
+    const { showAnimation, moveAnimation } = this.state
     return (
-      <Animated.View
-        style={{
-          transform: [
-            {
-              translateY: showAnimation.interpolate({
-                inputRange: [0, 1],
-                outputRange: [400, -15]
-              })
-            }
-          ]
-        }}
-      >
-        <View
+      <TouchableWithoutFeedback onPress={this.hidden}>
+        <Animated.View
           style={{
-            paddingHorizontal: 8,
-            alignItems: 'flex-end',
-            backgroundColor: '#FFF'
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: 'rgba(178,178,178,0.5)',
+            justifyContent: 'flex-end',
+            transform: [
+              {
+                translateY: showAnimation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [1000, 0]
+                })
+              }
+            ],
+            opacity: moveAnimation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 1]
+            })
           }}
         >
-          <Text style={{ color: '#45CCF6', fontSize: 16, padding: 8 }} onPress={this.hidden}>
-            确定
-          </Text>
-        </View>
-        <CustomCalendar {...this.props} />
-      </Animated.View>
+          <Animated.View
+            style={{
+              height: 390,
+              backgroundColor: '#FFF',
+              transform: [
+                {
+                  translateY: moveAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [400, 20]
+                  })
+                }
+              ]
+            }}
+          >
+            <View
+              style={{
+                paddingHorizontal: 8,
+                alignItems: 'flex-start',
+                backgroundColor: '#FFF'
+              }}
+            >
+              <Text style={{ color: '#45CCF6', fontSize: 20, padding: 8 }} onPress={this.hidden}>
+                确定
+              </Text>
+            </View>
+            <CustomCalendar {...this.props} />
+          </Animated.View>
+        </Animated.View>
+      </TouchableWithoutFeedback>
     )
   }
 }
