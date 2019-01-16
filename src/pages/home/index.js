@@ -27,7 +27,7 @@ export default class Home extends React.Component {
   }
 
   navigateToChargeAccount = () => {
-    this.props.navigation.navigate('ChargeAccount')
+    this.props.navigation.navigate('ChargeBill')
   }
   navigateToAnalysis = () => {
     this.props.navigation.navigate('Analysis')
