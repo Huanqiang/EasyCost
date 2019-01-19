@@ -1,7 +1,9 @@
 import React from 'react'
-import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Animated, View, Text, TouchableOpacity, Image, Dimensions, Easing } from 'react-native'
 import { CategotyIconAddress } from '../../util/constant'
 import Swipeable from 'react-native-swipeable'
+
+const { width } = Dimensions.get('window')
 
 const SwipeBtn = ({ title, color, onClick }) => {
   return (
@@ -33,30 +35,52 @@ const rightButtons = [
   <SwipeBtn title={'删除'} color={'red'} onClick={() => console.log('编辑')} />
 ]
 
-export default ({ icon, comment, money, category, color, date }) => {
-  return (
-    <Swipeable rightButtons={rightButtons}>
-      <View style={[Styles.container, { backgroundColor: color }]}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <View style={Styles.iconBG}>
-            <Image source={{ uri: CategotyIconAddress + icon }} style={{ width: 42, height: 42 }} />
-          </View>
-          {comment === '' ? (
-            <Text style={Styles.category}>{category}</Text>
-          ) : (
-            <View>
-              <Text style={Styles.category}>{category}</Text>
-              <Text style={Styles.comment}>{comment}</Text>
-            </View>
-          )}
-        </View>
+export default class Bill extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      show: new Animated.Value(width)
+    }
+  }
 
-        <Text style={{ fontSize: 26, color: color === '#FFFFFF' ? 'black' : '#FFF' }}>￥{money}</Text>
-        <ConnectLine style={{ top: 0 }} />
-        <ConnectLine style={{ bottom: 0 }} />
-      </View>
-    </Swipeable>
-  )
+  componentDidMount() {
+    Animated.timing(this.state.show, {
+      toValue: 0,
+      easing: Easing.in,
+      duration: 400,
+      delay: 200 * this.props.index
+    }).start()
+  }
+
+  render() {
+    const { icon, comment, money, category, color, date } = this.props
+    console.log(this.state.show)
+    return (
+      <Swipeable rightButtons={rightButtons}>
+        <Animated.View
+          style={[Styles.container, { backgroundColor: color, transform: [{ translateX: this.state.show }] }]}
+        >
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={Styles.iconBG}>
+              <Image source={{ uri: CategotyIconAddress + icon }} style={{ width: 42, height: 42 }} />
+            </View>
+            {comment === '' ? (
+              <Text style={Styles.category}>{category}</Text>
+            ) : (
+              <View>
+                <Text style={Styles.category}>{category}</Text>
+                <Text style={Styles.comment}>{comment}</Text>
+              </View>
+            )}
+          </View>
+
+          <Text style={{ fontSize: 26, color: color === '#FFFFFF' ? 'black' : '#FFF' }}>￥{money}</Text>
+          <ConnectLine style={{ top: 0 }} />
+          <ConnectLine style={{ bottom: 0 }} />
+        </Animated.View>
+      </Swipeable>
+    )
+  }
 }
 
 const Styles = StyleSheet.create({
