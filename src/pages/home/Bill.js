@@ -1,100 +1,98 @@
 import React from 'react'
-import { StyleSheet, View, Image, Text, TouchableHighlight } from 'react-native'
-import { transformDay } from '../../util/util'
-import Swipeout from 'react-native-swipeout'
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native'
+import { CategotyIconAddress } from '../../util/constant'
+import Swipeable from 'react-native-swipeable'
 
-var swipeoutBtns = [
-  {
-    type: 'delete',
-    text: '删除'
-  },
-  {
-    type: 'primary',
-    text: '编辑'
-  }
-]
-
-const DayBar = ({ day, total }) => {
+const SwipeBtn = ({ title, color, onClick }) => {
   return (
-    <View style={Styles.billTitle}>
-      <Text style={Styles.billTitleFont}>{transformDay(day)}</Text>
-      <Text style={Styles.billTitleFont}>共计: ￥{total}</Text>
-    </View>
-  )
-}
-
-const BillItem = ({ icon, remark, money }) => {
-  return (
-    <Swipeout right={swipeoutBtns} backgroundColor={'transparent'} sensitivity={30} buttonWidth={64} autoClose>
-      <View />
-      <View style={Styles.billBody}>
-        <View style={Styles.billIconContainer}>
-          <Image source={icon} style={Styles.billIcon} />
-        </View>
-        <View />
+    <TouchableOpacity onPress={onClick}>
+      <View
+        style={{
+          height: 24 + 45,
+          width: 76,
+          paddingLeft: 8,
+          marginVertical: 4
+        }}
+      >
         <View
-          style={{
-            flex: 1,
-            paddingHorizontal: 16,
-            flexDirection: 'row',
-            justifyContent: 'space-between'
-          }}
+          style={{ flex: 1, backgroundColor: color, alignItems: 'center', justifyContent: 'center', borderRadius: 4 }}
         >
-          <Text>{remark}</Text>
-          <Text>{money}</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: 16, color: '#FFF' }}>{title}</Text>
         </View>
       </View>
-    </Swipeout>
+    </TouchableOpacity>
   )
 }
 
-export default ({ day, bills }) => {
-  const total = bills.reduce((t, bill) => t + bill.money, 0)
+const ConnectLine = ({ style }) => {
+  return <View style={[Styles.connectLine, style]} />
+}
+
+const rightButtons = [
+  <SwipeBtn title={'编辑'} color={'#3695FE'} onClick={() => console.log('编辑')} />,
+  <SwipeBtn title={'删除'} color={'red'} onClick={() => console.log('编辑')} />
+]
+
+export default ({ icon, comment, money, category, color, date }) => {
   return (
-    <View>
-      <DayBar day={day} total={total} />
-      {bills.map(bill => (
-        <BillItem key={bill.id} {...bill} />
-      ))}
-    </View>
+    <Swipeable rightButtons={rightButtons}>
+      <View style={[Styles.container, { backgroundColor: color }]}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <View style={Styles.iconBG}>
+            <Image source={{ uri: CategotyIconAddress + icon }} style={{ width: 42, height: 42 }} />
+          </View>
+          {comment === '' ? (
+            <Text style={Styles.category}>{category}</Text>
+          ) : (
+            <View>
+              <Text style={Styles.category}>{category}</Text>
+              <Text style={Styles.comment}>{comment}</Text>
+            </View>
+          )}
+        </View>
+
+        <Text style={{ fontSize: 26, color: color === '#FFFFFF' ? 'black' : '#FFF' }}>￥{money}</Text>
+        <ConnectLine style={{ top: 0 }} />
+        <ConnectLine style={{ bottom: 0 }} />
+      </View>
+    </Swipeable>
   )
 }
 
 const Styles = StyleSheet.create({
-  billTitle: {
+  container: {
+    marginVertical: 3,
+    borderRadius: 4,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 10,
-    paddingBottom: 6,
-    paddingHorizontal: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F3F3'
-    // backgroundColor: '#D9D9D9'
+    alignItems: 'center'
   },
-  billTitleFont: {
-    color: '#858585',
-    fontSize: 13
-  },
-  billBody: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginLeft: 20,
-    paddingVertical: 8,
-    // backgroundColor: 'red',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F3F3'
-  },
-  billIconContainer: {
-    width: 33,
-    height: 33,
-    alignItems: 'center',
+  iconBG: {
     justifyContent: 'center',
-    borderRadius: 17,
-    backgroundColor: '#EBEAEA'
-    // marginRight: 16
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    width: 46,
+    height: 46,
+    borderRadius: 23
   },
-  billIcon: {
-    width: 21,
-    height: 21
+  category: {
+    marginLeft: 8,
+    fontSize: 17,
+    color: '#FFF'
+  },
+  comment: {
+    marginLeft: 8,
+    marginTop: 4,
+    fontSize: 14,
+    color: '#D9D9D9'
+  },
+  connectLine: {
+    position: 'absolute',
+    left: 23 + 15,
+    backgroundColor: '#FFF',
+    width: 1.5,
+    height: 12
   }
 })

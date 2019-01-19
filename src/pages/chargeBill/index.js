@@ -5,14 +5,14 @@ import NavigationBar from './NavigationBar'
 import Consume from './Consume'
 import BillCategories from './BillCategories'
 import Comment from './Comment'
-import { getMainColorInImage } from '../../util/util'
+import { getMainColorInImage, getFormatDay } from '../../util/util'
 import { saveBill, getCategoryComments } from '../../realm'
 import { CategotyIconAddress } from '../../util/constant'
 import Calendars from './Calendars'
 
 import categories from './categories'
 
-export default class ChangeAccount extends React.Component {
+export default class ChangeBill extends React.Component {
   // 禁用默认的导航栏
   static navigationOptions = () => ({
     header: null
@@ -26,13 +26,14 @@ export default class ChangeAccount extends React.Component {
       money: '0.00',
       color: '#FF9191',
       comment: '',
-      date: '2019-01-15',
+      date: getFormatDay(new Date()),
       predictCommets: []
     }
     this.calendarRef = React.createRef()
   }
 
   componentDidMount() {
+    console.log('change bill componentDidMount')
     this.getCurCategoryComments(this.state.category)
   }
 

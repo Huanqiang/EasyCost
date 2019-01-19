@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image, Dimensions } from 'react-native'
 // import { AnimatedCircularProgress } from 'react-native-circular-progress'
 
 const { width, height } = Dimensions.get('window')
-const HEADER_HEIGHT = 180
+const HEADER_HEIGHT = 200
 
 import HeaderBG from '../../static/header-bg.png'
 
@@ -44,7 +44,7 @@ export default ({ onRenderNavigation }) => {
       <Image style={{ flex: 1, resizeMode: 'cover', width: width, height: HEADER_HEIGHT }} source={HeaderBG} />
       <View style={{ position: 'absolute', width: width, height: HEADER_HEIGHT }}>
         {onRenderNavigation()}
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center', marginTop: 22 }}>
           <Budget budget={'600.00'} />
           <View style={{ flexDirection: 'row', marginTop: 18 }}>
             <Item title={'本周花费/元'} money={3000} />

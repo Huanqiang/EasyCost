@@ -1,4 +1,5 @@
 const Realm = require('realm')
+import { getTimeQuantumStart, getTimeQuantumEnd } from '../util/util'
 
 const Bill = {
   name: 'Bill',
@@ -31,33 +32,17 @@ const CategoryComment = {
 }
 
 const saveBill = bill => {
-  // Realm.open()
-  //   .then(realm => {
-  //     realm.write(() => {
-  //       realm.create('Bill', bill)
-  //       realm.create('CategoryComment', { comment: bill.comment, category: bill.category })
-  //     })
-
-  //     console.log(realm.objects('Bill'))
-  //     realm.close()
-  //   })
-  //   .catch(error => {
-
-  //   })
-
-  const realm = new Realm({ schema: [Bill, CategoryComment] })
-  try {
-    realm.write(() => {
-      realm.create('Bill', bill)
-      realm.create('CategoryComment', { comment: bill.comment, category: bill.category })
+  Realm.open()
+    .then(realm => {
+      realm.write(() => {
+        realm.create('Bill', bill)
+        realm.create('CategoryComment', { comment: bill.comment, category: bill.category })
+      })
+      realm.close()
     })
-
-    console.log(realm.objects('Bill'))
-  } catch (error) {
-    console.log(error)
-  } finally {
-    realm.close()
-  }
+    .catch(error => {
+      console.log(error)
+    })
 }
 
 const getCategoryComments = (category, callback) => {
@@ -83,30 +68,50 @@ const getCategoryComments = (category, callback) => {
     })
 }
 
-const fetchAllBillByDay = (day, callback) => {
-  Realm.open({ schema: [Bill] })
-    .then(realm => {
-      const bills = realm.objects('Bill').filtered(`date == ${day}`)
-      callback(bills)
-      realm.close()
-    })
-    .catch(error => {
-      console.log(error)
-      realm.close()
-    })
+const fetchAllBillByDay = async (day, callback) => {
+  return await fetchAllBillByTimeQuantum(getTimeQuantumStart(day, 'day'), getTimeQuantumEnd(day, 'day'), callback)
 }
 
-const fetchAllBillByTimeQuantum = (start, end, callback) => {
-  Realm.open({ schema: [Bill] })
-    .then(realm => {
-      const bills = realm.objects('Bill').filtered(`date >= $0 && date <= $1`, start, end)
-      callback(bills)
-      realm.close()
-    })
-    .catch(error => {
-      console.log(error)
-      realm.close()
-    })
+const fetchAllBillByWeek = (day, callback) => {
+  fetchAllBillByTimeQuantum(getTimeQuantumStart(day, 'week'), getTimeQuantumEnd(day, 'week'), callback)
 }
 
-export { saveBill, getCategoryComments, fetchAllBillByDay, fetchAllBillByTimeQuantum }
+const fetchAllBillByMonth = (day, callback) => {
+  fetchAllBillByTimeQuantum(getTimeQuantumStart(day, 'month'), getTimeQuantumEnd(day, 'month'), callback)
+}
+
+// const fetchAllBillByTimeQuantum = (start, end, callback) => {
+//   Realm.open({ schema: [Bill] })
+//     .then(realm => {
+//       const bills = realm
+//         .objects('Bill')
+//         .filtered('date >= $0 && date <= $1', start, end)
+//         .sorted('date')
+//       callback(Array.from(bills).reverse())
+//       realm.close()
+//     })
+//     .catch(error => {
+//       console.log(error)
+//       realm.close()
+//     })
+// }
+
+const fetchAllBillByTimeQuantum = async (start, end) => {
+  const realm = await Realm.open({ schema: [Bill] }).catch(e => {
+    console.log(e)
+  })
+  const bills = realm
+    .objects('Bill')
+    .filtered('date >= $0 && date <= $1', start, end)
+    .sorted('date')
+  return JSON.parse(JSON.stringify(Array.from(bills))).reverse()
+}
+
+export {
+  saveBill,
+  getCategoryComments,
+  fetchAllBillByDay,
+  fetchAllBillByWeek,
+  fetchAllBillByMonth,
+  fetchAllBillByTimeQuantum
+}

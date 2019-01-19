@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Image, FlatList } from 'react-native'
-import Bill from './Bill'
+import Bill from '../Bill'
 
 export default class BillList extends React.Component {
   keyExtractor = (item, index) => item.id
