@@ -6,7 +6,7 @@ import Header from './Header'
 import BillList from './BillList'
 import DayList from './DayList'
 import Indicator from './Indicator'
-import { fetchAllBillByDay } from '../../realm'
+import { fetchAllBillByDay, fetchAllBillByWeek, fetchAllBillByMonth } from '../../realm'
 import { transformDay, getFormatDay } from '../../util/util'
 import analysisIcon from '../../static/icon/analysis.png'
 import settingIcon from '../../static/icon/setting.png'
@@ -23,16 +23,19 @@ export default class Home extends React.Component {
     this.state = {
       day: new Date(),
       bills: [],
-      indicator: false
+      indicator: false,
+      budget: 0,
+      monthCost: 0,
+      weekCost: 0
     }
   }
 
-  async componentDidMount() {
-    this.setState({ bills: await fetchAllBillByDay(this.state.day) })
+  componentDidMount() {
+    this.loadData()
   }
 
   navigateToChargeAccount = () => {
-    this.props.navigation.navigate('ChargeBill')
+    this.props.navigation.navigate('ChargeBill', { page: 'Home', callback: () => this.loadData() })
   }
   navigateToAnalysis = () => {
     this.props.navigation.navigate('Analysis')
@@ -41,16 +44,36 @@ export default class Home extends React.Component {
     this.props.navigation.navigate('Setting')
   }
 
+  loadData = async () => {
+    const bills = await fetchAllBillByDay(this.state.day)
+    const weekCost = (await fetchAllBillByWeek(this.state.day)).reduce((res, bill) => res + +bill.money, 0)
+    const monthCost = (await fetchAllBillByMonth(this.state.day)).reduce((res, bill) => res + +bill.money, 0)
+    this.setState({ bills, weekCost, monthCost })
+
+    // fetchAllBillByDay(this.state.day, bills => {
+    //   this.setState({ bills })
+    // })
+    // fetchAllBillByWeek(this.state.day, bills => {
+    //   this.setState({ weekCost: bills.reduce((res, bill) => res + +bill.money, 0) })
+    // })
+    // fetchAllBillByMonth(this.state.day, bills => {
+    //   this.setState({ monthCost: bills.reduce((res, bill) => res + +bill.money, 0) })
+    // })
+
+    console.log('reload')
+  }
+
   changeCurDate = async day => {
     this.setState({ day: moment(day).toDate() })
     this.setState({ bills: await fetchAllBillByDay(moment(day).toDate()) })
   }
 
   scrolling = event => {
-    const distance = Math.abs(event.nativeEvent.contentOffset.y)
-    if (!this.state.indicator && distance >= 44) {
+    console.log(event.nativeEvent.contentOffset.y)
+    const distance = event.nativeEvent.contentOffset.y
+    if (!this.state.indicator && distance <= -44) {
       this.setState({ indicator: true })
-    } else if (this.state.indicator && distance <= 44) {
+    } else if (this.state.indicator && distance > -44) {
       this.setState({ indicator: false })
     }
   }
@@ -77,10 +100,10 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { day, bills, indicator } = this.state
+    const { day, bills, indicator, weekCost, monthCost, budget } = this.state
     return (
       <View style={Styles.container}>
-        <Header onRenderNavigation={this.renderNavigation} />
+        <Header onRenderNavigation={this.renderNavigation} weekCost={weekCost} monthCost={monthCost} budget={budget} />
         <View style={Styles.content}>
           <TouchableOpacity style={Styles.addButton} onPress={this.navigateToChargeAccount}>
             <Text style={{ color: '#FFFFFF', fontSize: 22 }}>新记一笔</Text>

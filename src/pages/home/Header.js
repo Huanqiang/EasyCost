@@ -38,18 +38,18 @@ const Budget = ({ budget }) => {
   )
 }
 
-export default ({ onRenderNavigation }) => {
+export default ({ onRenderNavigation, weekCost, monthCost, budget }) => {
   return (
     <View style={Styles.container}>
       <Image style={{ flex: 1, resizeMode: 'cover', width: width, height: HEADER_HEIGHT }} source={HeaderBG} />
       <View style={{ position: 'absolute', width: width, height: HEADER_HEIGHT }}>
         {onRenderNavigation()}
         <View style={{ alignItems: 'center', marginTop: 22 }}>
-          <Budget budget={'600.00'} />
+          <Budget budget={budget} />
           <View style={{ flexDirection: 'row', marginTop: 18 }}>
-            <Item title={'本周花费/元'} money={3000} />
+            <Item title={'本周花费/元'} money={weekCost} />
             <Splitline />
-            <Item title={'本月花费/元'} money={3000} />
+            <Item title={'本月花费/元'} money={monthCost} />
           </View>
         </View>
       </View>

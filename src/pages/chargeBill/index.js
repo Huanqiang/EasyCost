@@ -33,23 +33,20 @@ export default class ChangeBill extends React.Component {
   }
 
   componentDidMount() {
-    console.log('change bill componentDidMount')
     this.getCurCategoryComments(this.state.category)
   }
 
-  saveNewBill = () => {
+  saveNewBill = async () => {
     const { icon, category, money, color, comment, date, predictCommets } = this.state
-    saveBill({ icon, category, money, color, comment, date: new Date(date) })
+    await saveBill({ icon, category, money, color, comment, date: new Date(date) })
     this.back()
   }
 
   showCalendar = () => {
-    console.log('showCalendar')
     this.calendarRef.current.show()
   }
 
   changeDate = date => {
-    console.log(date)
     this.setState({ date })
   }
 
@@ -73,17 +70,15 @@ export default class ChangeBill extends React.Component {
     this.setState({ comment })
   }
 
-  getCurCategoryComments = category => {
-    getCategoryComments(category, comments => {
-      this.setState({ predictCommets: comments })
-      comments.forEach(comment => {
-        console.log(comment)
-      })
-    })
-    // this.setState({ predictCommets: getCategoryComments(category) })
+  getCurCategoryComments = async category => {
+    this.setState({ predictCommets: await getCategoryComments(category) })
+    // getCategoryComments(category, predictCommets => {
+    //   this.setState({ predictCommets })
+    // })
   }
 
   back = () => {
+    this.props.navigation.state.params.callback()
     this.props.navigation.goBack()
   }
 
