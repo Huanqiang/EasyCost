@@ -1,34 +1,18 @@
 import React from 'react'
 import { StyleSheet, View, Animated, Text, TouchableOpacity, Dimensions, PanResponder } from 'react-native'
-import moment from 'moment'
+import { transformDay, getFormatDay, getPrevDay } from '../../util/Date'
 
 const { width, height } = Dimensions.get('window')
 const DAY_WIDTH = (width - 64) / 7
-
-const getDay = day => {
-  if (moment(day).isSame(moment(), 'day')) {
-    return '今天'
-  } else if (moment(day).isSame(moment().subtract(1, 'days'), 'day')) {
-    return '昨天'
-  } else {
-    return moment(day).format('D号')
-  }
-}
 
 const getDays = (num = 7, firstDay) => {
   return [...Array(num)].reduce(res => [...res, getPrevDay(res[res.length - 1])], [firstDay])
 }
 
-const getPrevDay = day => {
-  return moment(day)
-    .subtract(1, 'days')
-    .format('YYYY-MM-DD')
-}
-
 const DayItem = ({ day }) => {
   return (
     <View style={Styles.dayContainer}>
-      <Text style={Styles.day}>{getDay(day)}</Text>
+      <Text style={Styles.day}>{transformDay(day, { format: 'D号' })}</Text>
     </View>
   )
 }
@@ -37,7 +21,7 @@ export default class DayList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      days: getDays(8, moment().format('YYYY-MM-DD')),
+      days: getDays(8, getFormatDay(new Date(), 'YYYY-MM-DD')),
       moveAnima: new Animated.Value(0),
       move: 0,
       lastMove: 0

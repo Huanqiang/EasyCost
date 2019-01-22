@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native'
-import { transformDay } from '../../util/util'
+import { transformDay } from '../../util/Date'
 
 import calendar from '../../static/icon/calendar.png'
 import close from '../../static/icon/close.png'

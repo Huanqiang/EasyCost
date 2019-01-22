@@ -47,8 +47,8 @@ export default class Bill extends React.Component {
     Animated.timing(this.state.show, {
       toValue: 0,
       easing: Easing.in,
-      duration: 400,
-      delay: 200 * this.props.index
+      duration: 340,
+      delay: 180 * this.props.index
     }).start()
   }
 

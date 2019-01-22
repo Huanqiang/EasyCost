@@ -1,5 +1,5 @@
 const Realm = require('realm')
-import { getTimeQuantumStart, getTimeQuantumEnd } from '../util/util'
+import { getTimeQuantumStart, getTimeQuantumEnd } from '../util/Date'
 
 const Bill = {
   name: 'Bill',

@@ -66,7 +66,7 @@ export default class Calendars extends React.Component {
       }),
       Animated.timing(this.state.moveAnimation, {
         toValue: 1,
-        duration: 400
+        duration: 300
       })
     ]).start()
   }

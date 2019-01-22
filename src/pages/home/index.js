@@ -1,13 +1,13 @@
 import React from 'react'
 import { StyleSheet, View, Button, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
-import moment from 'moment'
 import Navigation from './Navigation'
-import Header from './Header'
+import CostInfo from './CostInfo'
+import HeaderContainer from './HeaderContainer'
 import BillList from './BillList'
 import DayList from './DayList'
 import Indicator from './Indicator'
 import { fetchAllBillByDay, fetchAllBillByWeek, fetchAllBillByMonth } from '../../realm'
-import { transformDay, getFormatDay } from '../../util/util'
+import { transformDay, getFormatDay, toDate } from '../../util/Date'
 import analysisIcon from '../../static/icon/analysis.png'
 import settingIcon from '../../static/icon/setting.png'
 import noBillIcon from '../../static/no_bill.png'
@@ -64,8 +64,8 @@ export default class Home extends React.Component {
   }
 
   changeCurDate = async day => {
-    this.setState({ day: moment(day).toDate() })
-    this.setState({ bills: await fetchAllBillByDay(moment(day).toDate()) })
+    this.setState({ day: toDate(day) })
+    this.setState({ bills: await fetchAllBillByDay(toDate(day)) })
   }
 
   scrolling = event => {
@@ -86,6 +86,7 @@ export default class Home extends React.Component {
   }
 
   renderNavigation = () => {
+    console.log(transformDay(this.state.day))
     return (
       <Navigation>
         <Image source={analysisIcon} style={{ height: 24, width: 26 }} onPress={this.navigateToAnalysis} />
@@ -103,7 +104,9 @@ export default class Home extends React.Component {
     const { day, bills, indicator, weekCost, monthCost, budget } = this.state
     return (
       <View style={Styles.container}>
-        <Header onRenderNavigation={this.renderNavigation} weekCost={weekCost} monthCost={monthCost} budget={budget} />
+        <HeaderContainer onRenderNavigation={this.renderNavigation}>
+          <CostInfo weekCost={weekCost} monthCost={monthCost} budget={budget} />
+        </HeaderContainer>
         <View style={Styles.content}>
           <TouchableOpacity style={Styles.addButton} onPress={this.navigateToChargeAccount}>
             <Text style={{ color: '#FFFFFF', fontSize: 22 }}>新记一笔</Text>

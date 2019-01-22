@@ -1,9 +1,16 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native'
 
-export default ({ children }) => {
+const NavigationBar = ({ children }) => {
   return <View style={Styles.container}>{children}</View>
 }
+
+NavigationBar.propTypes = {
+  children: PropTypes.array.isRequired
+}
+
+export default NavigationBar
 
 const Styles = StyleSheet.create({
   container: {
