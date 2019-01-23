@@ -1,13 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, View, Image, Text, TouchableHighlight, Dimensions } from 'react-native'
+import { ScreenWidth } from '../../util/Constants'
 
 import backIcon from '../../static/icon/back.png'
 import doneIcon from '../../static/icon/done.png'
 import cleanIcon from '../../static/icon/clean.png'
 
-const { width, height } = Dimensions.get('window')
-const KEY_WIDTH = width / 4
+const KEY_WIDTH = ScreenWidth / 4
 
 const keyboardValues = [[7, 8, 9, 'clean'], [4, 5, 6, 'back'], [1, 2, 3, null], ['blank', 0, 'dot', 'done']]
 

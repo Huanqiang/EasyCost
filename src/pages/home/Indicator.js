@@ -1,9 +1,8 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image, Dimensions } from 'react-native'
+import { ScreenWidth } from '../../util/Constants'
 import upIcon from '../../static/icon/arrow_up.png'
 import downIcon from '../../static/icon/arrow_down.png'
-
-const { width } = Dimensions.get('window')
 
 export default ({ style, indicator }) => {
   return (
@@ -25,7 +24,7 @@ export default ({ style, indicator }) => {
 
 const Styles = StyleSheet.create({
   container: {
-    width: width - 16,
+    width: ScreenWidth - 16,
     height: 48,
     flexDirection: 'row',
     justifyContent: 'center',

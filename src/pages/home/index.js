@@ -6,11 +6,11 @@ import HeaderContainer from './HeaderContainer'
 import BillList from './BillList'
 import DayList from './DayList'
 import Indicator from './Indicator'
+import NoBill from './NoBill'
 import { fetchAllBillByDay, fetchAllBillByWeek, fetchAllBillByMonth } from '../../realm'
 import { transformDay, getFormatDay, toDate } from '../../util/Date'
 import analysisIcon from '../../static/icon/analysis.png'
 import settingIcon from '../../static/icon/setting.png'
-import noBillIcon from '../../static/no_bill.png'
 
 export default class Home extends React.Component {
   // 禁用默认的导航栏
@@ -86,7 +86,6 @@ export default class Home extends React.Component {
   }
 
   renderNavigation = () => {
-    console.log(transformDay(this.state.day))
     return (
       <Navigation>
         <Image source={analysisIcon} style={{ height: 24, width: 26 }} onPress={this.navigateToAnalysis} />
@@ -124,12 +123,7 @@ export default class Home extends React.Component {
             {bills.length !== 0 ? (
               <BillList dayBills={bills} />
             ) : (
-              <View style={{ marginTop: 36, justifyContent: 'center', alignItems: 'center' }}>
-                <Image source={noBillIcon} style={{ width: 126, height: 134 }} />
-                <Text style={{ marginTop: 8, fontSize: 18, fontWeight: '700', color: '#888888' }}>
-                  今天还没有记账消费哟！！！
-                </Text>
-              </View>
+              <NoBill title={'今天还没有记账消费哟！！！'} style={{ marginTop: 36 }} />
             )}
           </ScrollView>
         </View>

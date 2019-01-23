@@ -1,9 +1,9 @@
 import React from 'react'
-import { StyleSheet, View, Animated, Text, TouchableOpacity, Dimensions, PanResponder } from 'react-native'
+import { StyleSheet, View, Animated, Text, TouchableOpacity, PanResponder } from 'react-native'
 import { transformDay, getFormatDay, getPrevDay } from '../../util/Date'
+import { ScreenWidth } from '../../util/Constants'
 
-const { width, height } = Dimensions.get('window')
-const DAY_WIDTH = (width - 64) / 7
+const DAY_WIDTH = (ScreenWidth - 64) / 7
 
 const getDays = (num = 7, firstDay) => {
   return [...Array(num)].reduce(res => [...res, getPrevDay(res[res.length - 1])], [firstDay])
@@ -90,8 +90,8 @@ export default class DayList extends React.Component {
     // 日期移动后的剩余宽度
     const residue = this.state.days.length * (DAY_WIDTH + 8) + distance
     // 判断是否需要新增数据
-    if (residue <= width) {
-      const needAddItemNum = Math.floor((width - residue) / (DAY_WIDTH + 8)) + 1
+    if (residue <= ScreenWidth) {
+      const needAddItemNum = Math.floor((ScreenWidth - residue) / (DAY_WIDTH + 8)) + 1
       this.setState(prevState => {
         const needAddDays = getDays(needAddItemNum, getPrevDay(prevState.days[prevState.days.length - 1]))
         return {

@@ -1,9 +1,8 @@
 import React from 'react'
-import { StyleSheet, View, Image, Text, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from 'react-native'
-import { CategotyIconAddress } from '../../util/constant'
+import { StyleSheet, View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
+import { ScreenWidth, CategotyIconAddress } from '../../util/Constants'
 
-const { width, height } = Dimensions.get('window')
-const CATEGORY_WIDTH = width / 5
+const CATEGORY_WIDTH = ScreenWidth / 5
 
 const Category = ({ onClick, category, active }) => {
   return (

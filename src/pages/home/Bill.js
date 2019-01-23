@@ -1,9 +1,7 @@
 import React from 'react'
-import { StyleSheet, Animated, View, Text, TouchableOpacity, Image, Dimensions, Easing } from 'react-native'
-import { CategotyIconAddress } from '../../util/constant'
+import { StyleSheet, Animated, View, Text, TouchableOpacity, Image, Easing } from 'react-native'
+import { ScreenWidth, CategotyIconAddress } from '../../util/Constants'
 import Swipeable from 'react-native-swipeable'
-
-const { width } = Dimensions.get('window')
 
 const SwipeBtn = ({ title, color, onClick }) => {
   return (
@@ -39,7 +37,7 @@ export default class Bill extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      show: new Animated.Value(width)
+      show: new Animated.Value(ScreenWidth)
     }
   }
 
