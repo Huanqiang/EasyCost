@@ -8,7 +8,7 @@ import Comment from './Comment'
 import { getMainColorInImage } from '../../util/util'
 import { getFormatDay } from '../../util/Date'
 import { saveBill, getCategoryComments } from '../../realm'
-import { CategotyIconAddress } from '../../util/constant'
+import { CategotyIconAddress } from '../../util/Constants'
 import Calendars from './Calendars'
 
 import categories from './categories'

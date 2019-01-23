@@ -6,7 +6,7 @@ const PredictCommet = ({ comment, onClick }) => {
   return (
     <TouchableOpacity onPress={() => onClick(comment)}>
       <View style={Styles.predictCommet}>
-        <Text style={{ color: '#B8B8B8', fontSize: 12 }}>{comment}</Text>
+        <Text style={{ color: '#B8B8B8', fontSize: 13 }}>{comment}</Text>
       </View>
     </TouchableOpacity>
   )

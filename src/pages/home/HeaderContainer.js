@@ -21,7 +21,6 @@ export default ({ onRenderNavigation, children }) => {
 const Styles = StyleSheet.create({
   container: {
     height: HEADER_HEIGHT,
-    // backgroundColor: '#1A94F6',
     flexDirection: 'row'
   }
 })

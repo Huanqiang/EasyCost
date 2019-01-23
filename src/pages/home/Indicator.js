@@ -4,22 +4,26 @@ import { ScreenWidth } from '../../util/Constants'
 import upIcon from '../../static/icon/arrow_up.png'
 import downIcon from '../../static/icon/arrow_down.png'
 
-export default ({ style, indicator }) => {
+export const Ready = () => {
   return (
-    <View style={[Styles.container, style]}>
-      {indicator ? (
-        <>
-          <Image source={upIcon} style={{ width: 24, height: 24 }} />
-          <Text>准备新增</Text>
-        </>
-      ) : (
-        <>
-          <Image source={downIcon} style={{ width: 24, height: 24 }} />
-          <Text>新记一笔</Text>
-        </>
-      )}
-    </View>
+    <>
+      <Image source={upIcon} style={{ width: 24, height: 24 }} />
+      <Text>准备新增</Text>
+    </>
   )
+}
+
+export const Complete = () => {
+  return (
+    <>
+      <Image source={downIcon} style={{ width: 24, height: 24 }} />
+      <Text>新记一笔</Text>
+    </>
+  )
+}
+
+export default ({ style, children }) => {
+  return <View style={[Styles.container, style]}>{children}</View>
 }
 
 const Styles = StyleSheet.create({

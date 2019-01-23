@@ -5,12 +5,14 @@ import CostInfo from './CostInfo'
 import HeaderContainer from './HeaderContainer'
 import BillList from './BillList'
 import DayList from './DayList'
-import Indicator from './Indicator'
+import Indicator, { Ready, Complete } from './Indicator'
 import NoBill from './NoBill'
-import { fetchAllBillByDay, fetchAllBillByWeek, fetchAllBillByMonth } from '../../realm'
+import { fetchAllBillByDay, fetchAllBillByWeek, fetchAllBillByMonth, deleteBill } from '../../realm'
 import { transformDay, getFormatDay, toDate } from '../../util/Date'
 import analysisIcon from '../../static/icon/analysis.png'
 import settingIcon from '../../static/icon/setting.png'
+
+console.log('+new Date()', +new Date())
 
 export default class Home extends React.Component {
   // 禁用默认的导航栏
@@ -49,18 +51,11 @@ export default class Home extends React.Component {
     const weekCost = (await fetchAllBillByWeek(this.state.day)).reduce((res, bill) => res + +bill.money, 0)
     const monthCost = (await fetchAllBillByMonth(this.state.day)).reduce((res, bill) => res + +bill.money, 0)
     this.setState({ bills, weekCost, monthCost })
+  }
 
-    // fetchAllBillByDay(this.state.day, bills => {
-    //   this.setState({ bills })
-    // })
-    // fetchAllBillByWeek(this.state.day, bills => {
-    //   this.setState({ weekCost: bills.reduce((res, bill) => res + +bill.money, 0) })
-    // })
-    // fetchAllBillByMonth(this.state.day, bills => {
-    //   this.setState({ monthCost: bills.reduce((res, bill) => res + +bill.money, 0) })
-    // })
-
-    console.log('reload')
+  deleteBillById = async id => {
+    await deleteBill(id)
+    this.loadData()
   }
 
   changeCurDate = async day => {
@@ -118,12 +113,12 @@ export default class Home extends React.Component {
             onScroll={this.scrolling}
             onScrollEndDrag={this.scrollEnd}
           >
-            <Indicator style={{ position: 'absolute', top: -48 }} indicator={indicator} />
+            <Indicator style={{ position: 'absolute', top: -48 }}>{indicator ? <Ready /> : <Complete />}</Indicator>
             <DayList onChange={this.changeCurDate} />
             {bills.length !== 0 ? (
-              <BillList dayBills={bills} />
+              <BillList dayBills={bills} onDelete={this.deleteBillById} />
             ) : (
-              <NoBill title={'今天还没有记账消费哟！！！'} style={{ marginTop: 36 }} />
+              <NoBill key={day} title={'今天还没有记账消费哟！！！'} style={{ marginTop: 36 }} />
             )}
           </ScrollView>
         </View>
