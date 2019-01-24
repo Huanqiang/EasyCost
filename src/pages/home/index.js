@@ -6,6 +6,7 @@ import HeaderContainer from './HeaderContainer'
 import BillList from './BillList'
 import DayList from './DayList'
 import Indicator, { Ready, Complete } from './Indicator'
+import PullTableView from './PullTableView'
 import NoBill from './NoBill'
 import { fetchAllBillByDay, fetchAllBillByWeek, fetchAllBillByMonth, deleteBill } from '../../realm'
 import { transformDay, getFormatDay, toDate } from '../../util/Date'
@@ -25,7 +26,6 @@ export default class Home extends React.Component {
     this.state = {
       day: new Date(),
       bills: [],
-      indicator: false,
       budget: 0,
       monthCost: 0,
       weekCost: 0
@@ -63,23 +63,6 @@ export default class Home extends React.Component {
     this.setState({ bills: await fetchAllBillByDay(toDate(day)) })
   }
 
-  scrolling = event => {
-    console.log(event.nativeEvent.contentOffset.y)
-    const distance = event.nativeEvent.contentOffset.y
-    if (!this.state.indicator && distance <= -44) {
-      this.setState({ indicator: true })
-    } else if (this.state.indicator && distance > -44) {
-      this.setState({ indicator: false })
-    }
-  }
-
-  scrollEnd = event => {
-    if (this.state.indicator) {
-      this.navigateToChargeAccount()
-    }
-    this.setState({ indicator: false })
-  }
-
   renderNavigation = () => {
     return (
       <Navigation>
@@ -95,7 +78,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { day, bills, indicator, weekCost, monthCost, budget } = this.state
+    const { day, bills, weekCost, monthCost, budget } = this.state
     return (
       <View style={Styles.container}>
         <HeaderContainer onRenderNavigation={this.renderNavigation}>
@@ -105,22 +88,19 @@ export default class Home extends React.Component {
           <TouchableOpacity style={Styles.addButton} onPress={this.navigateToChargeAccount}>
             <Text style={{ color: '#FFFFFF', fontSize: 22 }}>新记一笔</Text>
           </TouchableOpacity>
-          <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{ marginHorizontal: 8 }}
-            scrollsToTop
-            scrollEventThrottle={64}
-            onScroll={this.scrolling}
-            onScrollEndDrag={this.scrollEnd}
+          <PullTableView
+            onRenderIndicator={indicator => (
+              <Indicator style={{ position: 'absolute', top: -48 }}>{indicator ? <Ready /> : <Complete />}</Indicator>
+            )}
+            onPullEnd={this.navigateToChargeAccount}
           >
-            <Indicator style={{ position: 'absolute', top: -48 }}>{indicator ? <Ready /> : <Complete />}</Indicator>
             <DayList onChange={this.changeCurDate} />
             {bills.length !== 0 ? (
               <BillList dayBills={bills} onDelete={this.deleteBillById} />
             ) : (
               <NoBill key={day} title={'今天还没有记账消费哟！！！'} style={{ marginTop: 36 }} />
             )}
-          </ScrollView>
+          </PullTableView>
         </View>
       </View>
     )
@@ -133,7 +113,6 @@ const Styles = StyleSheet.create({
   },
   content: {
     flex: 1
-    // marginHorizontal: 8
   },
   addButton: {
     backgroundColor: '#92C34A',
