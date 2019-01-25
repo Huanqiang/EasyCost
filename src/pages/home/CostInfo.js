@@ -1,5 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
+import Budget from './Budget'
 
 const Item = ({ title, money }) => {
   return (
@@ -23,19 +24,10 @@ const Splitline = () => {
   )
 }
 
-const Budget = ({ budget }) => {
-  return (
-    <View style={{ alignItems: 'center' }}>
-      <Text style={{ color: '#FFFFFF', fontSize: 32 }}>￥{budget}</Text>
-      <Text style={{ color: '#E8E8E8', fontSize: 12 }}>{'本月剩余/元'}</Text>
-    </View>
-  )
-}
-
-export default ({ weekCost = '0.00', monthCost = '0.00', budget = '0.00' }) => {
+export default ({ weekCost = '0.00', monthCost = '0.00', onShowBudgetModel }) => {
   return (
     <View style={{ alignItems: 'center', marginTop: 22 }}>
-      <Budget budget={budget} />
+      <Budget monthCost={monthCost} onShowBudgetModel={onShowBudgetModel} />
       <View style={{ flexDirection: 'row', marginTop: 18 }}>
         <Item title={'本周花费/元'} money={weekCost} />
         <Splitline />

@@ -2,7 +2,8 @@ import { NativeModules, Dimensions } from 'react-native'
 
 const { width: ScreenWidth, height: ScreenHeight } = Dimensions.get('window')
 
-const CategotyIconAddress = 'bundle/assets/src/static/icon/type/'
+export const CategotyIconAddress = 'bundle/assets/src/static/icon/type/'
+export const BUDGET_KEY = '@key/budget'
 
 const COLOR = {
   title: '#3D3D3D',
@@ -18,4 +19,4 @@ const FONTSIZE = {
   tip: 12
 }
 
-export { ScreenWidth, ScreenHeight, FONTSIZE, COLOR, CategotyIconAddress }
+export { ScreenWidth, ScreenHeight, FONTSIZE, COLOR }

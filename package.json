@@ -15,6 +15,7 @@
     "react-native": "0.57.8",
     "react-native-calendars": "^1.21.0",
     "react-native-circular-progress": "^1.1.0",
+    "react-native-dialog": "^5.5.0",
     "react-native-gesture-handler": "^1.0.12",
     "react-native-material-textfield": "^0.12.0",
     "react-native-svg": "^8.0.10",

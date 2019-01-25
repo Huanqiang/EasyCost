@@ -8,6 +8,7 @@ import DayList from './DayList'
 import Indicator, { Ready, Complete } from './Indicator'
 import PullTableView from './PullTableView'
 import NoBill from './NoBill'
+import SetBudget from './SetBudget'
 import { fetchAllBillByDay, fetchAllBillByWeek, fetchAllBillByMonth, deleteBill } from '../../realm'
 import { transformDay, getFormatDay, toDate } from '../../util/Date'
 import analysisIcon from '../../static/icon/analysis.png'
@@ -26,9 +27,9 @@ export default class Home extends React.Component {
     this.state = {
       day: new Date(),
       bills: [],
-      budget: 0,
       monthCost: 0,
-      weekCost: 0
+      weekCost: 0,
+      isBudgetVisible: false
     }
   }
 
@@ -63,6 +64,14 @@ export default class Home extends React.Component {
     this.setState({ bills: await fetchAllBillByDay(toDate(day)) })
   }
 
+  hiddenBudgetModel = () => {
+    this.setState({ isBudgetVisible: false })
+  }
+
+  showBudgetModel = () => {
+    this.setState({ isBudgetVisible: true })
+  }
+
   renderNavigation = () => {
     return (
       <Navigation>
@@ -78,11 +87,11 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { day, bills, weekCost, monthCost, budget } = this.state
+    const { day, bills, weekCost, monthCost, isBudgetVisible } = this.state
     return (
       <View style={Styles.container}>
         <HeaderContainer onRenderNavigation={this.renderNavigation}>
-          <CostInfo weekCost={weekCost} monthCost={monthCost} budget={budget} />
+          <CostInfo weekCost={weekCost} monthCost={monthCost} onShowBudgetModel={this.showBudgetModel} />
         </HeaderContainer>
         <View style={Styles.content}>
           <TouchableOpacity style={Styles.addButton} onPress={this.navigateToChargeAccount}>
@@ -102,6 +111,8 @@ export default class Home extends React.Component {
             )}
           </PullTableView>
         </View>
+
+        <SetBudget visible={isBudgetVisible} onDone={this.showBudgetModel} onCancel={this.hiddenBudgetModel} />
       </View>
     )
   }
