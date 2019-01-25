@@ -4,6 +4,8 @@ const { width: ScreenWidth, height: ScreenHeight } = Dimensions.get('window')
 
 export const CategotyIconAddress = 'bundle/assets/src/static/icon/type/'
 export const BUDGET_KEY = '@key/budget'
+export const ICLOUD_SYNC_KEY = '@key/iCloudSync'
+export const PASSWORD_LOCK_KEY = '@key/passwordLock'
 
 const COLOR = {
   title: '#3D3D3D',

@@ -19,7 +19,9 @@ console.log('+new Date()', +new Date())
 export default class Home extends React.Component {
   // 禁用默认的导航栏
   static navigationOptions = () => ({
-    header: null
+    header: null,
+    headerBackTitle: '返回',
+    headerTruncatedBackTitle: '返回'
   })
 
   constructor(props) {
@@ -75,13 +77,17 @@ export default class Home extends React.Component {
   renderNavigation = () => {
     return (
       <Navigation>
-        <Image source={analysisIcon} style={{ height: 24, width: 26 }} onPress={this.navigateToAnalysis} />
+        <TouchableOpacity onPress={this.navigateToAnalysis}>
+          <Image source={analysisIcon} style={{ height: 24, width: 26 }} />
+        </TouchableOpacity>
         <View
           style={{ borderColor: '#FFF', borderWidth: 1, borderRadius: 30, paddingHorizontal: 12, paddingVertical: 3 }}
         >
           <Text style={{ fontSize: 16, color: '#FFF' }}>{transformDay(this.state.day)}</Text>
         </View>
-        <Image source={settingIcon} style={{ height: 26, width: 26 }} onPress={this.navigateToSetting} />
+        <TouchableOpacity onPress={this.navigateToSetting}>
+          <Image source={settingIcon} style={{ height: 26, width: 26 }} />
+        </TouchableOpacity>
       </Navigation>
     )
   }
